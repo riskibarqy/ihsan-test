@@ -7,12 +7,16 @@ import (
 	"github.com/gofiber/fiber/v2/log"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/golang-migrate/migrate/v4"
 
 	"github.com/riskibarqy/ihsan-test/internal/config"
 	"github.com/riskibarqy/ihsan-test/internal/delivery/http"
 	"github.com/riskibarqy/ihsan-test/internal/repository"
 	"github.com/riskibarqy/ihsan-test/internal/usecase"
 	"github.com/riskibarqy/ihsan-test/pkg/database"
+
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func main() {
@@ -25,8 +29,11 @@ func main() {
 
 	db, err := database.ConnectPostgres(cfg)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err, cfg.GetDatabaseDSN())
 	}
+
+	// Run Migrations before starting the app
+	runMigrations(cfg)
 
 	// Initialize Repository, Usecase, and Handlers
 
@@ -43,6 +50,23 @@ func main() {
 	// Setup Routes
 	http.SetupRoutes(app, userHandler, userBalanceHistoryHandler)
 
-	// Start server
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", cfg.AppPort)))
+}
+
+// runMigrations running file migrations
+func runMigrations(cfg *config.Config) {
+	m, err := migrate.New(
+		"file://migrations",
+		cfg.GetDatabaseDSN(),
+	)
+	if err != nil {
+		log.Fatal("Migration initialization failed: %v", err)
+	}
+
+	err = m.Up()
+	if err != nil && err != migrate.ErrNoChange {
+		log.Fatal("Migration failed: %v", err)
+	}
+
+	log.Info("Migrations applied successfully")
 }

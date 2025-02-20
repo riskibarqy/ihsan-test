@@ -2,8 +2,9 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"os"
+
+	"github.com/gofiber/fiber/v2/log"
 )
 
 type Config struct {
@@ -22,11 +23,11 @@ func LoadConfig() *Config {
 	cfg := &Config{
 		AppMode: getEnv("APP_MODE", "development"),
 		AppPort: getEnv("APP_PORT", "8080"),
-		DBHost:  getEnv("DB_HOST", "localhost"),
+		DBHost:  getEnv("DB_HOST", "postgres"),
 		DBPort:  getEnv("DB_PORT", "5432"),
-		DBName:  getEnv("DB_NAME", ""),
-		DBUser:  getEnv("DB_USERNAME", ""),
-		DBPass:  getEnv("DB_PASSWORD", ""),
+		DBName:  getEnv("DB_NAME", "ihsan_test_db"),
+		DBUser:  getEnv("DB_USERNAME", "user"),
+		DBPass:  getEnv("DB_PASSWORD", "password"),
 		DBSSL:   getEnv("DB_SSLMODE", "disable"),
 	}
 
@@ -47,10 +48,10 @@ func getEnv(key, defaultValue string) string {
 	return value
 }
 
-// GetDatabaseDSN returns the Postgre connection string
+// GetDatabaseDSN get database connection string
 func (c *Config) GetDatabaseDSN() string {
 	return fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		c.DBHost, c.DBPort, c.DBUser, c.DBPass, c.DBName, c.DBSSL,
+		"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+		c.DBUser, c.DBPass, c.DBHost, c.DBPort, c.DBName, c.DBSSL,
 	)
 }

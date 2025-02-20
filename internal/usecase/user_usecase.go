@@ -22,6 +22,7 @@ func (u *UserUsecase) GetUserByID(ctx context.Context, id int) (*domain.User, er
 	return u.userRepo.GetByID(ctx, id)
 }
 
+// GetUserBalanceByNoRekening get user balance by no rekening
 func (u *UserUsecase) GetUserBalanceByNoRekening(ctx context.Context, no_rekening string) (*datatransfers.UserGetBalanceResponse, error) {
 	users, _, err := u.userRepo.GetAll(ctx, &datatransfers.ListQueryParams{
 		NoRekening: no_rekening,
@@ -47,10 +48,12 @@ func (u *UserUsecase) GetUserBalanceByNoRekening(ctx context.Context, no_rekenin
 	}, nil
 }
 
+// GetAll get all user by params
 func (u *UserUsecase) GetAll(ctx context.Context, params *datatransfers.ListQueryParams) ([]*domain.User, int, error) {
 	return u.userRepo.GetAll(ctx, params)
 }
 
+// CreateUser create user
 func (u *UserUsecase) CreateUser(ctx context.Context, user *domain.User) error {
 	return u.userRepo.Create(ctx, user)
 }

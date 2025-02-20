@@ -23,6 +23,7 @@ func NewUserBalanceHistoryUsecase(userBalanceHistoryrepo domain.UserBalanceHisto
 	}
 }
 
+// CreateBalance to add/withdraw funds to user accounts
 func (u *UserBalanceHistoryUsecase) CreateBalance(ctx context.Context, params *datatransfers.UserBalanceHistoryTXRequest) (*datatransfers.UserBalanceHistoryTXResponse, error) {
 	users, _, err := u.userRepo.GetAll(ctx, &datatransfers.ListQueryParams{
 		NoRekening: params.NoRekening,

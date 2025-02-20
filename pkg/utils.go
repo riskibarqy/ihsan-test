@@ -20,7 +20,7 @@ func GenerateNoRekening() string {
 	return fmt.Sprintf("%s%d", prefix, randomNumber)
 }
 
-// CleanPhoneNumber removes any non-numeric characters from the phone number
+// CleanPhoneNumber removes any non numeric characters from the phone number
 func CleanPhoneNumber(phone string) string {
 	re := regexp.MustCompile(`\D`) // \D matches any non-digit character
 	return re.ReplaceAllString(phone, "")
