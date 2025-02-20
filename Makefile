@@ -9,8 +9,8 @@ MIGRATE=migrate -path migrations -database "$(DB_CONNECTION_STRING)"
 .PHONY: migrate-up migrate-down migrate-new migrate-force migrate-version run
 
 migrate-new:
-	@read -p "Enter migration name: " name; \
-	migrate create -ext sql -dir migrations -seq $$name
+	@read -p "migration name ? : " migration_name \
+	&& migrate  create  -ext sql -dir migrations -seq "$${migration_name}" 
 
 migrate-up:
 	$(MIGRATE) up

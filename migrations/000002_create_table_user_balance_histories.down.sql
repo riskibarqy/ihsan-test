@@ -1,0 +1,1 @@
+drop table "user_balance_histories";

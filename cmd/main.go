@@ -29,12 +29,19 @@ func main() {
 	}
 
 	// Initialize Repository, Usecase, and Handlers
+
+	// user
 	userRepo := repository.NewUserRepository(db)
 	userUsecase := usecase.NewUserUsecase(userRepo)
 	userHandler := http.NewUserHandler(userUsecase)
 
+	// user balance history
+	userBalanceHistoryRepo := repository.NewUserBalanceHistoryRepository(db)
+	userBalanceHistoryUsecase := usecase.NewUserBalanceHistoryUsecase(userBalanceHistoryRepo, userRepo)
+	userBalanceHistoryHandler := http.NewUserBalanceHistoryHandler(userBalanceHistoryUsecase)
+
 	// Setup Routes
-	http.SetupRoutes(app, userHandler)
+	http.SetupRoutes(app, userHandler, userBalanceHistoryHandler)
 
 	// Start server
 	log.Fatal(app.Listen(fmt.Sprintf(":%s", cfg.AppPort)))

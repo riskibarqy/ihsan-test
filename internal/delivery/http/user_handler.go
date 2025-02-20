@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -56,8 +57,23 @@ func (h *UserHandler) RegisterUser(c *fiber.Ctx) error {
 		if strings.Contains(err.Error(), constants.SQLErrorDuplicate) {
 			return datatransfers.Error(c, http.StatusBadRequest, constants.UserFailedCreateDuplicated, "user telah terdaftar")
 		}
-		return datatransfers.Error(c, http.StatusInternalServerError, constants.UserFailedCreate, err.Error())
+		return datatransfers.Error(c, http.StatusInternalServerError, constants.InternalServerError, err.Error())
 	}
 
 	return datatransfers.Success(c, user)
+}
+
+// GetUserBalance get user current balance
+func (h *UserHandler) GetUserBalance(c *fiber.Ctx) error {
+	fmt.Println(c.Params("no_rekening"))
+	balance, err := h.usecase.GetUserBalanceByNoRekening(c.Context(), c.Params("no_rekening"))
+	if err != nil {
+		log.Error(err)
+		if strings.Contains(err.Error(), constants.RecordNotFound) {
+			return datatransfers.Error(c, http.StatusBadRequest, constants.UserGetBalanceNotFound, "data no rekening tidak ditemukan")
+		}
+		return datatransfers.Error(c, http.StatusInternalServerError, constants.InternalServerError, err.Error())
+	}
+
+	return datatransfers.Success(c, balance)
 }

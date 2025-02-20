@@ -25,3 +25,29 @@ func CleanPhoneNumber(phone string) string {
 	re := regexp.MustCompile(`\D`) // \D matches any non-digit character
 	return re.ReplaceAllString(phone, "")
 }
+
+// GenerateTransactionID creates a unique transaction ID
+func GenerateTransactionID() string {
+	randomCode := randomString(4) + randomDigits(3)
+	return fmt.Sprintf("TXN-%d-%s", Now(), randomCode)
+}
+
+// randomString generates a random uppercase string
+func randomString(n int) string {
+	letters := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	result := make([]byte, n)
+	for i := range result {
+		result[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(result)
+}
+
+// randomDigits generates a random numeric string
+func randomDigits(n int) string {
+	digits := "0123456789"
+	result := make([]byte, n)
+	for i := range result {
+		result[i] = digits[rand.Intn(len(digits))]
+	}
+	return string(result)
+}

@@ -1,0 +1,1 @@
+ALTER TABLE public."users" ADD COLUMN "balance" BIGINT NOT NULL DEFAULT 0;
