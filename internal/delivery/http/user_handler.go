@@ -1,11 +1,14 @@
 package http
 
 import (
+	"net/http"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/riskibarqy/ihsan-test/internal/constants"
 	"github.com/riskibarqy/ihsan-test/internal/domain"
 	"github.com/riskibarqy/ihsan-test/internal/usecase"
+	"github.com/riskibarqy/ihsan-test/response"
 )
 
 type UserHandler struct {
@@ -19,26 +22,26 @@ func NewUserHandler(uc *usecase.UserUsecase) *UserHandler {
 func (h *UserHandler) GetUser(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid ID"})
+		return response.Error(c, http.StatusBadRequest, constants.UserInvalidID, err.Error())
 	}
 
 	user, err := h.usecase.GetUserByID(id)
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
+		return response.Error(c, http.StatusNotFound, constants.UserNotFound, err.Error())
 	}
 
-	return c.JSON(user)
+	return response.Success(c, user)
 }
 
 func (h *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := new(domain.User)
 	if err := c.BodyParser(user); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request"})
+		return response.Error(c, http.StatusBadRequest, constants.UserInvalidRequest, err.Error())
 	}
 
 	err := h.usecase.CreateUser(user)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create user"})
+		return response.Error(c, http.StatusInternalServerError, constants.UserFailedCreate, err.Error())
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(user)

@@ -1,4 +1,4 @@
-CREATE TABLE public."user"
+CREATE TABLE public."users"
 (
     "id" SERIAL NOT NULL,
     "nama" VARCHAR(100) NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE public."user"
     CONSTRAINT user_pkey PRIMARY KEY ("id")
 );
 
-CREATE INDEX user_nik_idx ON public."user"("nik");
-CREATE INDEX user_no_hp_idx ON public."user"("no_hp");
-CREATE INDEX user_deleted_at_idx ON public."user"("deleted_at");
+CREATE INDEX user_nik_idx ON public."users"("nik");
+CREATE INDEX user_no_hp_idx ON public."users"("no_hp");
+CREATE INDEX user_deleted_at_idx ON public."users"("deleted_at");
 

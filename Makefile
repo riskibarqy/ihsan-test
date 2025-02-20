@@ -5,7 +5,7 @@ endif
 
 MIGRATE=migrate -path migrations -database "$(DB_CONNECTION_STRING)"
 
-.PHONY: migrate-up migrate-down migrate-new migrate-force migrate-version 
+.PHONY: migrate-up migrate-down migrate-new migrate-force migrate-version run
 
 migrate-new:
 	@read -p "Enter migration name: " name; \
@@ -23,3 +23,6 @@ migrate-force:
 
 migrate-version:
 	$(MIGRATE) version
+
+run:
+	@go run cmd/main.go
