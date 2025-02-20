@@ -92,6 +92,10 @@ README.md  # Project documentation
 
 Refer to `Ihsan Solusi Test.postman_collection.json` for available API endpoints.
 
+## Explanation Video
+
+https://drive.google.com/file/d/1NpL-mUvkS87DmLQsnzfThVHMx6fyGk04/view?usp=drive_link
+
 ## License
 
 This project is licensed under the MIT License. See `LICENSE` for details.
