@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -20,6 +21,9 @@ type Config struct {
 
 // LoadConfig loads environment variables into Config struct
 func LoadConfig() *Config {
+	// Load .env file (ignore errors if it doesn't exist)
+	_ = godotenv.Load()
+
 	cfg := &Config{
 		AppMode: getEnv("APP_MODE", "development"),
 		AppPort: getEnv("APP_PORT", "8080"),
