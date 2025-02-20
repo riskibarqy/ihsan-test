@@ -1,21 +1,22 @@
 ifneq (,$(wildcard .env))
     include .env
-    export $(shell sed 's/=.*//' .env)
+    export
 endif
 
+DB_CONNECTION_STRING=postgres://$(DB_USERNAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)
 MIGRATE=migrate -path migrations -database "$(DB_CONNECTION_STRING)"
 
 .PHONY: migrate-up migrate-down migrate-new migrate-force migrate-version run
 
 migrate-new:
 	@read -p "Enter migration name: " name; \
-	migrate create -ext sql -dir migrations -format unix $$name
+	migrate create -ext sql -dir migrations -seq $$name
 
 migrate-up:
 	$(MIGRATE) up
 
 migrate-down:
-	$(MIGRATE) down 1
+	$(MIGRATE) down
 
 migrate-force:
 	@read -p "Enter version: " version; \

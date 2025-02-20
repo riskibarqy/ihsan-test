@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+	"github.com/riskibarqy/ihsan-test/internal/config"
 )
 
-func ConnectPostgres() (*sql.DB, error) {
-	dsn := "host=localhost user=user password=password dbname=ihsan_test_db sslmode=disable"
-	db, err := sql.Open("postgres", dsn)
+func ConnectPostgres(cfg *config.Config) (*sql.DB, error) {
+	db, err := sql.Open("postgres", cfg.GetDatabaseDSN())
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
 	}

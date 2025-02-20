@@ -1,9 +1,14 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/log"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+
+	"github.com/riskibarqy/ihsan-test/internal/config"
 	"github.com/riskibarqy/ihsan-test/internal/delivery/http"
 	"github.com/riskibarqy/ihsan-test/internal/repository"
 	"github.com/riskibarqy/ihsan-test/internal/usecase"
@@ -11,11 +16,14 @@ import (
 )
 
 func main() {
-	// Initialize Fiber app
 	app := fiber.New()
 
-	// Connect to database
-	db, err := database.ConnectPostgres()
+	app.Use(logger.New())
+	app.Use(healthcheck.New())
+
+	cfg := config.LoadConfig()
+
+	db, err := database.ConnectPostgres(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,5 +37,5 @@ func main() {
 	http.SetupRoutes(app, userHandler)
 
 	// Start server
-	log.Fatal(app.Listen(":8080"))
+	log.Fatal(app.Listen(fmt.Sprintf(":%s", cfg.AppPort)))
 }
