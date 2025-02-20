@@ -75,8 +75,8 @@ README.md  # Project documentation
 
 1.  Clone the repository:
     ```sh
-    git clone <repository-url>
-    cd <project-directory>
+    git clone https://github.com/riskibarqy/ihsan-test
+    cd ihsan-test
     ```
 2.  Copy the example environment file and configure it:
     ```sh
